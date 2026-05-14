@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Polsinello Team Signature Generator</title>
+<meta name="description" content="Generate branded email signatures for The Polsinello Real Estate Team — eXp Realty Brokerage." />
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #F5F5F0;
+    color: #0B1E3B;
+    line-height: 1.5;
+  }
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  .brand-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .brand-logo {
+    width: 48px;
+    height: 48px;
+    background: #0B1E3B;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    border-radius: 6px;
+  }
+  .brand-bar h1 {
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #0B1E3B;
+  }
+  .brand-bar .subtitle {
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+  }
+  .gold-divider {
+    height: 2px;
+    background: #C5A059;
+    margin: 16px 0 28px;
+  }
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #E3E4E6;
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(11, 30, 59, 0.06);
+  }
+  .card h2 {
+    margin: 0 0 6px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0B1E3B;
+  }
+  .card .card-desc {
+    font-size: 13px;
+    color: #888;
+    margin: 0 0 20px;
+  }
+  .field {
+    margin-bottom: 16px;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0B1E3B;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .field-hint {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+  }
+  .field-hint code {
+    background: #F5F5F0;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 11px;
+    color: #C5A059;
+  }
+  input[type=text], input[type=tel] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #E3E4E6;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #0B1E3B;
+    background: #FFFFFF;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type=text]:focus, input[type=tel]:focus {
+    outline: none;
+    border-color: #C5A059;
+    box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) {
+    .row { grid-template-columns: 1fr; }
+  }
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  button {
+    cursor: pointer;
+    padding: 11px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary {
+    background: #0B1E3B;
+    color: #FFFFFF;
+    flex: 1;
+  }
+  .btn-primary:hover { background: #15305C; }
+  .btn-primary:active { transform: scale(0.99); }
+  .btn-secondary {
+    background: #FFFFFF;
+    color: #0B1E3B;
+    border-color: #E3E4E6;
+  }
+  .btn-secondary:hover { border-color: #C5A059; color: #C5A059; }
+  .btn-gold {
+    background: #C5A059;
+    color: #FFFFFF;
+  }
+  .btn-gold:hover { background: #B08C45; }
+  .err-msg {
+    display: none;
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #FBEAEA;
+    color: #A02828;
+    border-radius: 6px;
+    font-size: 13px;
+    border-left: 3px solid #A02828;
+  }
+  .status-msg {
+    display: none;
+    margin: 12px 0;
+    padding: 10px 14px;
+    background: #E8F4E8;
+    color: #2D6B2D;
+    border-radius: 6px;
+    font-size: 13px;
+    border-left: 3px solid #2D6B2D;
+  }
+  .preview-wrap {
+    display: none;
+  }
+  .preview-frame {
+    background: #FFFFFF;
+    border: 1px solid #E3E4E6;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+  .actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 600px) {
+    .actions-grid { grid-template-columns: 1fr; }
+  }
+  details.help {
+    background: #FFFFFF;
+    border: 1px solid #E3E4E6;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 20px;
+  }
+  details.help summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #0B1E3B;
+    font-size: 14px;
+  }
+  details.help div {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.7;
+  }
+  details.help code {
+    background: #F5F5F0;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 11px;
+    color: #C5A059;
+  }
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 12px;
+    color: #888;
+  }
+  footer strong { color: #C5A059; }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+<div class="page">
+
+  <div class="brand-bar">
+    <div class="brand-logo">PT</div>
+    <div>
+      <h1>Email Signature Generator</h1>
+      <div class="subtitle">The Polsinello Real Estate Team · eXp Realty Brokerage</div>
+    </div>
+  </div>
+
+  <div class="gold-divider"></div>
+
+  <div class="card">
+    <h2>Team member details</h2>
+    <p class="card-desc">Fill in the three fields below. Everything else (team name, phone formatting, brokerage, website, social links, review URL, tagline, trust bar) is locked to brand standard.</p>
+
+    <div class="field">
+      <label for="fullName">Full name</label>
+      <input type="text" id="fullName" placeholder="e.g. Frank Polsinello" autocomplete="off" />
+    </div>
+
+    <div class="field">
+      <label for="title">Title</label>
+      <input type="text" id="title" placeholder="e.g. Realtor(R) | Partner" autocomplete="off" />
+      <div class="field-hint">Use <code>|</code> between roles. Type <code>(R)</code> to insert ® automatically.</div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" placeholder="(905) 830-9111" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="email">Email (optional)</label>
+        <input type="text" id="email" placeholder="frank@polsinello.ca" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" id="generateBtn">Generate signature</button>
+      <button class="btn-secondary" id="clearBtn">Clear</button>
+    </div>
+
+    <div class="err-msg" id="errorMsg"></div>
+  </div>
+
+  <div class="preview-wrap" id="preview">
+    <div class="card">
+      <h2>Preview</h2>
+      <p class="card-desc">This is exactly what the team member's email signature will look like.</p>
+      <div class="preview-frame" id="previewBox"></div>
+
+      <div class="status-msg" id="copyStatus"></div>
+
+      <div class="actions-grid">
+        <button class="btn-gold" id="copySigBtn">📋 Copy signature HTML</button>
+        <button class="btn-gold" id="downloadSigBtn">⬇ Download signature .html</button>
+        <button class="btn-secondary" id="copyGuideBtn">📋 Copy install guide</button>
+        <button class="btn-secondary" id="downloadGuideBtn">⬇ Download install guide .md</button>
+      </div>
+    </div>
+  </div>
+
+  <details class="help">
+    <summary>How to use this generator</summary>
+    <div>
+      <p>Fill in the three required fields and click <strong>Generate signature</strong>. A live preview appears below, exactly matching the team's signature template — Deep Navy <code>#0B1E3B</code> headers, Metallic Gold <code>#C5A059</code> accents, white background, social text-links, gold review button, italic tagline, and trust bar.</p>
+      <p><strong>Download the signature .html</strong> — that's the file each team member opens in Chrome, then selects + copies + pastes into their Gmail / FUB / Apple Mail.</p>
+      <p><strong>Download the install guide .md</strong> — personalized to the team member, covers all three platforms step-by-step.</p>
+      <p>Email both files to the team member and they're set.</p>
+    </div>
+  </details>
+
+  <footer>
+    Built for <strong>The Polsinello Real Estate Team</strong> · GreaterTorontoHomePros.com
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  // Team-locked constants — never edit unless team-wide brand changes
+  var TEAM_NAME = 'The Polsinello Real Estate Team';
+  var BROKERAGE = 'eXp Realty Brokerage';
+  var WEBSITE = 'GreaterTorontoHomePros.com';
+  var WEBSITE_URL = 'https://www.greatertorontohomepros.com';
+  var REVIEW_URL = 'https://g.page/r/CROgSV4IGVV4EBM/review';
+  var FB_URL = 'https://www.facebook.com/ThePolsinelloTeam';
+  var IG_URL = 'https://www.instagram.com/thepolsinelloteam/';
+  var LI_URL = 'https://www.linkedin.com/company/28166116/';
+  var X_URL = 'https://x.com/PolsinelloTeam';
+  var YT_URL = 'https://www.youtube.com/@thepolsinelloteam';
+  var TAGLINE = 'We strive to exceed your real estate expectations, making it our mission to provide you with the best real estate service experience possible!';
+
+  var fullNameInput = document.getElementById('fullName');
+  var titleInput = document.getElementById('title');
+  var phoneInput = document.getElementById('phone');
+  var emailInput = document.getElementById('email');
+  var generateBtn = document.getElementById('generateBtn');
+  var clearBtn = document.getElementById('clearBtn');
+  var errorMsg = document.getElementById('errorMsg');
+  var preview = document.getElementById('preview');
+  var previewBox = document.getElementById('previewBox');
+  var copySigBtn = document.getElementById('copySigBtn');
+  var downloadSigBtn = document.getElementById('downloadSigBtn');
+  var copyGuideBtn = document.getElementById('copyGuideBtn');
+  var downloadGuideBtn = document.getElementById('downloadGuideBtn');
+  var copyStatus = document.getElementById('copyStatus');
+
+  var currentSignatureHTML = '';
+  var currentGuideMD = '';
+  var currentSlug = '';
+
+  function slugify(name) {
+    return name.toLowerCase().trim().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+  }
+  function cleanPhone(p) { return p.replace(/\D/g, ''); }
+  function formatPhoneDisplay(p) {
+    var d = cleanPhone(p);
+    if (d.length === 10) return '(' + d.slice(0,3) + ') ' + d.slice(3,6) + '-' + d.slice(6);
+    if (d.length === 11 && d[0] === '1') return '(' + d.slice(1,4) + ') ' + d.slice(4,7) + '-' + d.slice(7);
+    return p;
+  }
+  function buildTelLink(p) {
+    var d = cleanPhone(p);
+    if (d.length === 10) return '+1' + d;
+    if (d.length === 11) return '+' + d;
+    return d;
+  }
+  function processTitle(raw) {
+    return raw.trim().replace(/\(R\)/gi, '&reg;').replace(/\s*\|\s*/g, ' &nbsp;|&nbsp; ');
+  }
+  function cleanTitleForGuide(raw) {
+    return raw.trim().replace(/\(R\)/gi, '\u00AE');
+  }
+  function showError(m) { errorMsg.textContent = m; errorMsg.style.display = 'block'; }
+  function hideError() { errorMsg.style.display = 'none'; }
+  function showStatus(m) {
+    copyStatus.textContent = m;
+    copyStatus.style.display = 'block';
+    setTimeout(function() { copyStatus.style.display = 'none'; }, 2500);
+  }
+
+  function buildSignature(name, titleProcessed, phoneDisplay, telLink) {
+    return '<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#0B1E3B;max-width:560px;background-color:#FFFFFF;">\n' +
+      '  <tr>\n' +
+      '    <td style="padding:0;vertical-align:top;background-color:#FFFFFF;">\n' +
+      '      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">\n' +
+      '        <tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;color:#0B1E3B;letter-spacing:1px;padding-bottom:2px;">' + name.toUpperCase() + '</td></tr>\n' +
+      '        <tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;color:#C5A059;letter-spacing:0.5px;padding-bottom:8px;text-transform:uppercase;">' + titleProcessed + '</td></tr>\n' +
+      '        <tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#0B1E3B;font-weight:600;padding-bottom:10px;">' + TEAM_NAME + ' &nbsp;|&nbsp; ' + BROKERAGE + '</td></tr>\n' +
+      '      </table>\n' +
+      '      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;width:100%;"><tr><td style="background-color:#C5A059;height:2px;line-height:2px;font-size:0;border:0;">&nbsp;</td></tr></table>\n' +
+      '      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;padding-top:10px;">\n' +
+      '        <tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#0B1E3B;padding:10px 0 4px 0;"><span style="color:#C5A059;font-weight:bold;">P:</span>&nbsp;<a href="tel:' + telLink + '" style="color:#0B1E3B;text-decoration:none;font-weight:bold;">' + phoneDisplay + '</a></td></tr>\n' +
+      '        <tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#0B1E3B;padding-bottom:14px;"><span style="color:#C5A059;font-weight:bold;">W:</span>&nbsp;<a href="' + WEBSITE_URL + '" style="color:#0B1E3B;text-decoration:none;font-weight:bold;">' + WEBSITE + '</a></td></tr>\n' +
+      '      </table>\n' +
+      '      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;width:100%;">\n' +
+      '        <tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#0B1E3B;padding-bottom:14px;letter-spacing:0.3px;">\n' +
+      '          <span style="color:#C5A059;font-weight:bold;">CONNECT:</span>&nbsp;\n' +
+      '          <a href="' + FB_URL + '" style="color:#0B1E3B;text-decoration:none;font-weight:600;">Facebook</a>\n' +
+      '          <span style="color:#C5A059;">&nbsp;|&nbsp;</span>\n' +
+      '          <a href="' + IG_URL + '" style="color:#0B1E3B;text-decoration:none;font-weight:600;">Instagram</a>\n' +
+      '          <span style="color:#C5A059;">&nbsp;|&nbsp;</span>\n' +
+      '          <a href="' + LI_URL + '" style="color:#0B1E3B;text-decoration:none;font-weight:600;">LinkedIn</a>\n' +
+      '          <span style="color:#C5A059;">&nbsp;|&nbsp;</span>\n' +
+      '          <a href="' + X_URL + '" style="color:#0B1E3B;text-decoration:none;font-weight:600;">X</a>\n' +
+      '          <span style="color:#C5A059;">&nbsp;|&nbsp;</span>\n' +
+      '          <a href="' + YT_URL + '" style="color:#0B1E3B;text-decoration:none;font-weight:600;">YouTube</a>\n' +
+      '        </td></tr>\n' +
+      '      </table>\n' +
+      '      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td style="vertical-align:middle;"><a href="' + REVIEW_URL + '" style="text-decoration:none;display:inline-block;"><table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td style="background-color:#C5A059;height:32px;text-align:center;vertical-align:middle;border-radius:4px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;color:#FFFFFF;line-height:32px;padding:0 18px;letter-spacing:0.5px;">&#9733; REVIEW US ON GOOGLE</td></tr></table></a></td></tr></table>\n' +
+      '      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;width:100%;margin-top:14px;"><tr><td style="padding-top:14px;"><table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background-color:#FFFFFF;border-left:3px solid #C5A059;width:100%;"><tr><td style="padding:10px 14px;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-style:italic;color:#0B1E3B;line-height:1.5;background-color:#FFFFFF;">' + TAGLINE + '</td></tr></table></td></tr></table>\n' +
+      '      <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;width:100%;margin-top:12px;"><tr><td style="padding-top:12px;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#0B1E3B;letter-spacing:0.5px;"><span style="color:#C5A059;font-weight:bold;">5,000+</span> HOMES SOLD &nbsp;&nbsp;&bull;&nbsp;&nbsp; <span style="color:#C5A059;font-weight:bold;">$3B+</span> IN SALES &nbsp;&nbsp;&bull;&nbsp;&nbsp; <span style="color:#C5A059;font-weight:bold;">37+</span> YEARS &nbsp;&nbsp;&bull;&nbsp;&nbsp; <span style="color:#C5A059;font-weight:bold;">1,150+</span> REVIEWS</td></tr></table>\n' +
+      '    </td>\n' +
+      '  </tr>\n' +
+      '</table>';
+  }
+
+  function buildFullHTML(sigBody, name) {
+    return '<!DOCTYPE html>\n<html>\n<head>\n<meta charset="UTF-8">\n<title>' + name + ' Email Signature</title>\n</head>\n<body style="margin:0;padding:20px;background:#FFFFFF;font-family:Arial,Helvetica,sans-serif;">\n\n<!-- ============================================ -->\n<!-- EMAIL SIGNATURE - START COPYING FROM HERE -->\n<!-- ============================================ -->\n\n' + sigBody + '\n\n<!-- ============================================ -->\n<!-- EMAIL SIGNATURE - END COPYING HERE -->\n<!-- ============================================ -->\n\n</body>\n</html>';
+  }
+
+  function buildGuide(name, titleClean, phoneDisplay, slug) {
+    var firstName = name.split(' ')[0];
+    var firstLetter = name.charAt(0).toUpperCase();
+    var nameUpper = name.toUpperCase();
+    return '# Your Branded Email Signature\n## ' + name + ' — The Polsinello Real Estate Team\n\nHi ' + firstName + ',\n\nAttached is your new branded email signature, formatted for The Polsinello Team. This guide walks you through installing it on the platforms you use.\n\n**Your signature details:**\n- **Name:** ' + name + '\n- **Title:** ' + titleClean + '\n- **Phone:** ' + phoneDisplay + '\n- **File name:** `' + slug + '-email-signature.html`\n\n---\n\n## Quick Start: Gmail (Recommended)\n\nTakes about 90 seconds. Most reliable installation.\n\n1. Save the attached HTML file to your Downloads folder.\n2. Right-click the file → **Open With** → **Google Chrome** (or Safari).\n3. Your browser will open showing your fully rendered signature.\n4. Click just before the **' + firstLetter + '** at the start of **' + nameUpper + '** at the top.\n5. Hold **Shift** and click just after **REVIEWS** at the bottom of the trust bar.\n6. Press **Cmd+C** (Mac) or **Ctrl+C** (Windows) to copy.\n7. Open **Gmail** (gmail.com) → click the **gear icon** (top right) → **See all settings**.\n8. Scroll to the **Signature** section → click **+ Create new** → name it **Polsinello** → click **Create**.\n9. Click into the signature box → press **Cmd+V** / **Ctrl+V** to paste.\n10. Below the box, set **Signature defaults** — both dropdowns to **Polsinello**.\n11. Check the box: **"Insert signature before quoted text in replies and remove the \'--\' line that precedes it"**.\n12. Scroll to the bottom → click **Save Changes**.\n13. Compose a new email to test — your signature should appear automatically.\n\n**Mobile:** Your Gmail signature will automatically sync to the Gmail iOS and Android apps. No separate install needed.\n\n---\n\n## Follow Up Boss\n\nIf you send client emails through FUB, install this signature there too.\n\n1. Open your branded HTML file in **Chrome** (right-click → Open With → Google Chrome).\n2. Select the rendered signature (click just before your name, Shift+click after **REVIEWS**).\n3. Press **Cmd+C** / **Ctrl+C** to copy.\n4. Open **Follow Up Boss** → click your **profile icon** (top right) → **My Settings**.\n5. Scroll to the **Email Signature** section.\n6. Click into the box → paste (**Cmd+V** / **Ctrl+V**) → click **Save**.\n7. Open any contact\'s page and send a test email to confirm.\n\n**Important:** FUB Mass Email and Action Plan templates have their own signature settings. If you use those, update the signature inside each template individually.\n\n---\n\n## Apple Mail (Mac)\n\nApple Mail is the trickiest of the three. The standard paste-into-Settings method does **not** work — Apple Mail strips the formatting. You must edit the signature file directly on your Mac\'s hard drive.\n\nIf this is your first time, consider asking Frank or Brandon to walk you through it. Once you\'ve done it once, future updates are quick.\n\n### Phase 1: Create a placeholder\n\n1. Open **Mail** → menu bar **Mail** → **Settings** → **Signatures** tab.\n2. Click your email account on the left.\n3. Click the **+** button at the bottom of the middle column.\n4. Name the new signature **Polsinello**.\n5. Type **TEMP** in the right pane (any placeholder word).\n6. **Uncheck** "Always match my default message font" at the bottom.\n7. Set the signature dropdown at the top to **Polsinello** as default.\n8. **Quit Mail completely** (Cmd+Q — fully quit, not just close the window).\n\n### Phase 2: Find the signature file\n\n9. In Finder, press **Cmd+Shift+G** → paste `~/Library/Mail/` → press Enter.\n10. Open the folder with the highest **V** number (V10, V11, V12, etc.).\n11. Open **MailData** → open **Signatures**.\n12. Switch to **List view** (Cmd+2) → sort by **Date Modified** (newest first).\n13. You\'ll see one or more `.mailsignature` files. Click each and press **Spacebar** for Quick Look. Find the one showing **"TEMP"**.\n\n### Phase 3: Replace the contents\n\n14. Right-click that file → **Open With** → **TextEdit**.\n15. In TextEdit: **Format → Make Plain Text** (Shift+Cmd+T). If the menu says "Make Rich Text", you\'re already in plain text — skip.\n16. Click your cursor just before `<body...`.\n17. Hold **Shift** and press **Cmd + Down Arrow** to select everything to the end.\n18. Press **Delete**. You should see only 5 header lines starting with `Content-Transfer-Encoding`.\n19. Click at the end of the **Mime-Version** line → press **Return** twice for a blank line.\n20. Now open your branded HTML file in **TextEdit** as well.\n21. Select everything (Cmd+A) → copy (Cmd+C).\n22. Switch back to the `.mailsignature` file → paste (Cmd+V) below the headers.\n23. Save (Cmd+S) — keep the `.mailsignature` extension if asked. Do NOT add `.txt`.\n24. Quit TextEdit (Cmd+Q).\n\n### Phase 4: Lock and flush\n\n25. Back in the Signatures folder, single-click your edited file.\n26. Press **Cmd+I** → check the **Locked** box → close Get Info.\n27. In the same folder, drag **`AllSignatures.plist`** to the Trash. (Mail rebuilds it automatically.)\n28. Open **Mail** → press **Cmd+N** for a new email.\n\nYour branded signature should now appear.\n\n### If it doesn\'t work\n\nIf your signature shows blank or still shows "TEMP", you likely edited the wrong `.mailsignature` file. Quit Mail, unlock both files (Cmd+I → uncheck Locked), Quick Look each one to find the one containing "TEMP", and repeat Phase 3-4 on that file.\n\n---\n\n## Common Questions\n\n**Why are the social media links just text instead of icons?**\nEmail clients and CRMs (especially FUB) strip embedded icon images. Text-based social links render reliably everywhere — Gmail, Apple Mail, Outlook, FUB, mobile, and any other client. The whole team uses this format so everyone\'s emails look consistent.\n\n**Can I edit the signature myself to add a personal photo or change the colours?**\nNo — please don\'t. The branding is unified across the entire team so client inboxes recognize "this is The Polsinello Team" regardless of which agent emails them. If you need a change, ask Frank.\n\n**Does this work on Outlook?**\nYes — the install method is similar to Gmail. Open the HTML in Chrome, select the rendered signature, copy, then paste into Outlook → File → Options → Mail → Signatures.\n\n---\n\n## Need Help?\n\nContact Frank or Brandon directly. Welcome to the new branded email standard!\n';
+  }
+
+  function generate() {
+    hideError();
+    var name = fullNameInput.value.trim();
+    var titleRaw = titleInput.value.trim();
+    var phoneRaw = phoneInput.value.trim();
+
+    if (!name || !titleRaw || !phoneRaw) {
+      showError('Please fill in name, title, and phone.');
+      return;
+    }
+
+    var phoneDigits = cleanPhone(phoneRaw);
+    if (phoneDigits.length < 10) {
+      showError('Phone number looks incomplete. Need at least 10 digits.');
+      return;
+    }
+
+    var titleProcessed = processTitle(titleRaw);
+    var titleClean = cleanTitleForGuide(titleRaw);
+    var phoneDisplay = formatPhoneDisplay(phoneRaw);
+    var telLink = buildTelLink(phoneRaw);
+    var slug = slugify(name);
+
+    var sigBody = buildSignature(name, titleProcessed, phoneDisplay, telLink);
+    var fullHTML = buildFullHTML(sigBody, name);
+    var guideMD = buildGuide(name, titleClean, phoneDisplay, slug);
+
+    currentSignatureHTML = fullHTML;
+    currentGuideMD = guideMD;
+    currentSlug = slug;
+
+    previewBox.innerHTML = sigBody;
+    preview.style.display = 'block';
+    preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function downloadFile(content, filename, mime) {
+    var blob = new Blob([content], { type: mime });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 100);
+  }
+
+  function copyToClipboard(text, label) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function() {
+        showStatus(label + ' copied to clipboard');
+      }).catch(function() {
+        fallbackCopy(text, label);
+      });
+    } else {
+      fallbackCopy(text, label);
+    }
+  }
+
+  function fallbackCopy(text, label) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showStatus(label + ' copied to clipboard');
+    } catch (err) {
+      showError('Copy failed — please download the file instead.');
+    }
+    document.body.removeChild(ta);
+  }
+
+  generateBtn.addEventListener('click', generate);
+
+  clearBtn.addEventListener('click', function() {
+    fullNameInput.value = '';
+    titleInput.value = '';
+    phoneInput.value = '';
+    emailInput.value = '';
+    preview.style.display = 'none';
+    hideError();
+    fullNameInput.focus();
+  });
+
+  copySigBtn.addEventListener('click', function() {
+    copyToClipboard(currentSignatureHTML, 'Signature HTML');
+  });
+  downloadSigBtn.addEventListener('click', function() {
+    downloadFile(currentSignatureHTML, currentSlug + '-email-signature.html', 'text/html');
+    showStatus('Signature .html downloaded');
+  });
+  copyGuideBtn.addEventListener('click', function() {
+    copyToClipboard(currentGuideMD, 'Install guide');
+  });
+  downloadGuideBtn.addEventListener('click', function() {
+    downloadFile(currentGuideMD, currentSlug + '-INSTALL-GUIDE.md', 'text/markdown');
+    showStatus('Install guide .md downloaded');
+  });
+
+  [fullNameInput, titleInput, phoneInput].forEach(function(el) {
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') generate();
+    });
+  });
+})();
+</script>
+</body>
+</html>
