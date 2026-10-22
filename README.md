@@ -49,7 +49,7 @@ All of these are hard-coded into the generator. If they change team-wide, edit `
 - Review URL: g.page/r/CROgSV4IGVV4EBM/review
 - Social: Facebook, Instagram, LinkedIn, X, YouTube (team accounts)
 - Tagline: "Rooted Refined Relentless"
-- Trust bar: 5,000+ Homes Sold · $3B+ in Sales · 37+ Years · 1,200+ Reviews
+- Trust bar: 5,000+ Homes Sold · $3B+ in Sales · 37+ Years · 1,230+ Reviews
 - Colours: Deep Navy `#0B1E3B` · Metallic Gold `#C5A059` · White `#FFFFFF`
 
 ## License
